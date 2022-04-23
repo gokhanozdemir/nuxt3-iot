@@ -1,16 +1,11 @@
 import createAuth0Client from "@auth0/auth0-spa-js";
-// const state = authState();
 
-// export default defineNuxtPlugin((nuxtApp) => {
 export const useAuth0 = (state, config) => {
   const handleStateChange = async () => {
     console.log("handleStateChange initiated");
-    state.isAuthenticated == !!(await state.auth0.isAuthenticated());
     state.user = await state.auth0.getUser();
+    state.isAuthenticated = !!(await state.auth0.isAuthenticated());
     state.loading = false;
-    console.log("state ", !!(await state.auth0.isAuthenticated()));
-
-    console.log("handleStateChange finished");
   };
 
   const initAuth = () => {
@@ -21,7 +16,6 @@ export const useAuth0 = (state, config) => {
       client_id: config.client_id,
       cacheLocation: "localstorage",
       redirect_uri: window.location.origin,
-      // redirect_uri: "http://localhost:3000/",
     }).then(async (auth) => {
       state.auth0 = auth;
       await handleStateChange();
@@ -39,7 +33,6 @@ export const useAuth0 = (state, config) => {
     console.log("init logout");
     state.auth0.logout({
       returnTo: window.location.origin,
-      // returnTo: "http://localhost:3000/",
     });
   };
 
