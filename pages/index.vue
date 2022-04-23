@@ -25,22 +25,27 @@
 </template>
 
 <script setup>
-import useAuth0 from "~/plugins/useAuth0";
+import { useAuth0 } from "~/utils/useAuth0";
 
-// import useAuth0 from "~/plugins/useAuth0";
 const useAuth0State = authState();
-onMounted(() => {
-  // const { login, logout, initAuth } = useAuth0(useAuth0State);
-  // initAuth();
-});
+const runtimeConfig = useRuntimeConfig();
+const configAuth = {
+  domain: runtimeConfig.auth0Domain,
+  client_id: runtimeConfig.auth0ClientId,
+};
+// console.log(authState);
+// console.log("configAuth ", configAuth);
+
+const { login, logout, initAuth } = useAuth0(useAuth0State, configAuth);
+initAuth();
 
 // This will also work in `<script setup>`
 definePageMeta({
   //   layout: "custom",
 });
-console.log("store");
-console.log(useAuth0State);
-console.log("store");
+// console.log("store");
+// console.log(useAuth0State);
+// console.log("store");
 let count = ref(9);
 // const increment = () => {
 //   console.log("clicked");
