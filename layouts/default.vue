@@ -1,3 +1,6 @@
+<script setup>
+// auth
+</script>
 <template>
   <div>
     <p>
@@ -6,10 +9,11 @@
     Some shared layout content:
     <!-- Markup shared across all pages, ex: NavBar -->
 
-    <ul>
+    <!-- <ul>
       <li><NuxtLink to="/">Home page</NuxtLink></li>
-      <li><NuxtLink to="/login">Login</NuxtLink></li>
-    </ul>
+      <li><NuxtLink to="/auth/signed-in">Login</NuxtLink></li>
+      <li><NuxtLink to="/auth/signed-out">Logout</NuxtLink></li>
+    </ul> -->
 
     <NuxtPage />
   </div>
