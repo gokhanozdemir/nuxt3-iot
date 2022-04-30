@@ -24,7 +24,8 @@ export const useAuth0 = (state, config) => {
       domain: config.domain,
       client_id: config.client_id,
       cacheLocation: "localstorage",
-      redirect_uri: window.location.origin,
+      // redirect_uri: window.location.origin,
+      //FIX add a ssr fix that will work on online servers too
     }).then(async (auth) => {
       state.auth0 = auth;
       await handleStateChange();
@@ -42,7 +43,8 @@ export const useAuth0 = (state, config) => {
     state.loading = true;
     console.log("init logout");
     state.auth0.logout({
-      returnTo: window.location.origin,
+      // returnTo: window.location.origin,
+      //FIX add a ssr fix that will work on online servers too
     });
   };
 
