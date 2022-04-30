@@ -1,4 +1,13 @@
 import createAuth0Client from "@auth0/auth0-spa-js";
+// It will be available as authState() (camelCase of file name without extension)
+export default function () {
+  return useState("authState", () => ({
+    user: null,
+    loading: false,
+    auth0: null,
+    isAuthenticated: false,
+  }));
+}
 
 export const useAuth0 = (state, config) => {
   const handleStateChange = async () => {
@@ -30,6 +39,7 @@ export const useAuth0 = (state, config) => {
   };
 
   const logout = async () => {
+    state.loading = true;
     console.log("init logout");
     state.auth0.logout({
       returnTo: window.location.origin,
