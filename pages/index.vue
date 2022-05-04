@@ -1,38 +1,34 @@
 <template>
-  <div>
-    <div>
-      olala
-      {{ count }}
+  <div class="d-flex align-center flex-column">
+    <div v-if="!useAuth0State.loading">
+      <div v-if="!useAuth0State.isAuthenticated">
+        <v-btn @click="login()" color="primary" size="x-large"
+          >Let't Get Started</v-btn
+        >
+      </div>
+
+      <div v-else>
+        <v-card class="mx-auto" max-width="344">
+          <v-card-header>
+            <div>
+              <div class="text-overline mb-1">Welcome</div>
+              <div class="text-h6 mb-1">
+                <strong>{{ useAuth0State.user.name }}</strong>
+              </div>
+              <div class="text-caption">
+                HeliumPower is a device management system.
+              </div>
+            </div>
+          </v-card-header>
+          <v-card-actions>
+            <v-btn @click="logout()"> Logout </v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
     </div>
-    <div class="d-flex align-center flex-column">
-      <div class="text-subtitle-2">With props</div>
-      <v-card
-        width="400"
-        title="This is a title"
-        subtitle="This is a subtitle"
-        text="This is content"
-      ></v-card>
 
-      <div class="mt-4 text-subtitle-2">With slots</div>
-      <v-card width="400">
-        <template v-slot:title> This is a title </template>
-
-        <template v-slot:subtitle> This is a subtitle </template>
-
-        <template v-slot:text> This is content </template>
-      </v-card>
-
-      <div class="mt-4 text-subtitle-2">With markup</div>
-      <v-card width="400">
-        <v-card-header>
-          <v-card-header-text>
-            <v-card-title>This is a title</v-card-title>
-            <v-card-subtitle>This is a subtitle</v-card-subtitle>
-          </v-card-header-text>
-        </v-card-header>
-
-        <v-card-text> This is content </v-card-text>
-      </v-card>
+    <div v-else>
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
     </div>
   </div>
 </template>
@@ -42,9 +38,16 @@
 definePageMeta({
   //   layout: "custom",
 });
-let count = ref(9);
-const increment = () => {
-  console.log("clicked");
-  count.value++;
+// auth
+// import { useAuth0 } from "~/utils/useAuth0";
+
+let useAuth0State = authState();
+const runtimeConfig = useRuntimeConfig();
+const configAuth = {
+  domain: runtimeConfig.auth0Domain,
+  client_id: runtimeConfig.auth0ClientId,
 };
+
+const { login, logout, initAuth } = useAuth0(useAuth0State.value, configAuth);
+initAuth();
 </script>
