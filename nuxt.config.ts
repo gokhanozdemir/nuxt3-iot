@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     public: {
       auth0Domain: process.env.AUTH0_DOMAIN,
       auth0ClientId: process.env.AUTH0_CLIENT_ID,
+      heliumKey: process.env.HELIUM_KEY,
       apiBase: "/api",
     },
   },

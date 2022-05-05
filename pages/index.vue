@@ -22,6 +22,7 @@
           </v-card-header>
           <v-card-actions>
             <v-btn @click="logout()"> Logout </v-btn>
+            <v-btn to="/device" color="primary"> Devices </v-btn>
           </v-card-actions>
         </v-card>
       </div>
