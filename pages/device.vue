@@ -24,6 +24,8 @@ const { data: devices } = await useFetch(
   }
 );
 
+// TODO: Merge the 2 requests above together: https://v3.nuxtjs.org/guide/features/data-fetching/ end of the page
+
 // const { data: mountain } = await useFetch(
 //   "https://api.nuxtjs.dev/mountains/mount-everest",
 //   {
@@ -32,13 +34,50 @@ const { data: devices } = await useFetch(
 // );
 // response.data
 // response.headers
+
+const { data: deviceNew } = await useFetch(
+  "https://console.helium.com/api/v1/devices",
+  {
+    method: "POST",
+    params: {
+      name: "kaktus10004",
+      app_eui: "0000000000000010",
+      app_key: "01020304050607080910111213141517",
+      dev_eui: "0102030405060709",
+    },
+    headers: { key: config.heliumKey },
+    async onResponse({ request, response, options }) {
+      // Log response
+      console.log("[fetch response]", request, response.status, response.body);
+    },
+  }
+);
 </script>
 <template>
   <!-- <div>Current Balance {{ data["dc_balance"] }}</div>
   <div>Current Helium Name {{ data["name"] }}</div> -->
   <div>Devices {{ organization }}</div>
   <v-btn to="/"> Back </v-btn>
-  <v-btn to="/device-add" color="primary"> Add Device </v-btn>
+  olala
+  {{ deviceNew }}
+  olala
+  <v-card v-if="deviceNew" class="mx-auto" max-width="344">
+    <v-card-header>
+      <div>
+        <div class="text-overline mb-1">DeviceNew</div>
+        <div class="text-h6 mb-1">
+          <strong>Active: {{ deviceNew.active }}</strong>
+        </div>
+        <div class="text-caption">
+          {{ deviceNew.app_key }}
+          <span>{{ deviceNew }}</span>
+        </div>
+      </div>
+    </v-card-header>
+    <v-card-actions> </v-card-actions>
+  </v-card>
+  olala
+
   <v-card v-for="device in devices" class="mx-auto" max-width="344">
     <v-card-header>
       <div>
@@ -48,6 +87,7 @@ const { data: devices } = await useFetch(
         </div>
         <div class="text-caption">
           {{ device.app_key }}
+          <span>{{ device }}</span>
         </div>
       </div>
     </v-card-header>
