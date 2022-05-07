@@ -1,4 +1,4 @@
-import { defineNuxtConfig } from "nuxt3";
+import { defineNuxtConfig } from "nuxt";
 import vuetify from "./plugins/vuetify";
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       "process.env.DEBUG": false,
     },
   },
-  // ssr: false,
+  ssr: false,
   runtimeConfig: {
     // The private keys which are only available within server-side
 

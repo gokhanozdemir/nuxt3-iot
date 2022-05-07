@@ -3,10 +3,14 @@
   "scripts": {
     "dev": "nuxi dev && nuxi typecheck .",
     "build": "nuxi build",
-    "start": "node .output/server/index.mjs"
+    "start": "node .output/server/index.mjs",
+    "preview": "nuxt preview",
+    "buildNew": "nuxt build",
+    "devbuildNew": "nuxt dev",
+    "generatebuildNew": "nuxt generate"
   },
   "devDependencies": {
-    "nuxt3": "latest"
+    "nuxt": "3.0.0-rc.1"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.21.0",
@@ -14,3 +18,4 @@
     "vuetify": "3.0.0-beta.1"
   }
 }
+
