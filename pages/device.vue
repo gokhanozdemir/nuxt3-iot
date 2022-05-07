@@ -56,49 +56,12 @@ const config = useRuntimeConfig();
 
 const form = reactive({
   app_eui: null,
-  name: null,
-  email: null,
-  message: null,
-  getData: {},
 });
-
-const submitDevice = async (config) => {
-  console.log("olala");
-  return await $fetch("https://console.helium.com/api/v1/devices", {
-    method: "POST",
-    params: {
-      name: "kaktus10004",
-      app_eui: "00000000000000121",
-      app_key: "01020304050607080910111213141517",
-      dev_eui: "0102030405060709",
-    },
-    headers: {
-      key: config.heliumKey,
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  }).catch((error) => error.data);
-  // return ({ data, pending, error, refresh } = useFetch(
-  //   "https://console.helium.com/api/v1/devices",
-  //   {
-  //     method: "POST",
-  //     params: {
-  //       name: "kaktus10004",
-  //       app_eui: "0000000000000011",
-  //       app_key: "01020304050607080910111213141517",
-  //       dev_eui: "0102030405060709",
-  //     },
-  //     headers: {
-  //       key: config.heliumKey,
-  //     },
-  //   }
-  // ));
-  console.log("olalaaa");
-};
 
 let heliumState = ref({
   organization: null,
   devices: null,
+  deviceCount: 0,
 });
 
 const heliumOrgDetails = async () => {
@@ -123,6 +86,40 @@ const heliumDevices = async () => {
       },
     }
   ).catch((error) => error.data);
+
+  let nextID = "100000000000001";
+  heliumState.deviceCount = heliumState.value.devices.length;
+  const increaseandappend = () => {
+    nextID = "100000000000001" + heliumState.deviceCount;
+    console.log(
+      heliumState.deviceCount,
+      "heliumState.deviceCount, ",
+      nextID,
+      ", nextID "
+    );
+    form.app_eui = nextID;
+  };
+  increaseandappend();
+};
+
+const newDevice = async () => {
+  heliumState.value.deviceNew = await $fetch(
+    "https://console.helium.com/api/v1/devices",
+    {
+      method: "POST",
+      headers: {
+        key: config.heliumKey,
+        "Content-Type": "application/json",
+      },
+      params: {
+        name: "kaktus10004",
+        app_eui: form.app_eui,
+        app_key: "01020304050607080910111213141517",
+        dev_eui: "0102030405060709",
+      },
+    }
+  ).catch((error) => error.data);
+  console.log("form.app_eui,", form.app_eui);
 };
 
 const mountainData = ref({
@@ -146,36 +143,21 @@ const mountaionDetailsGet = async () => {
 <template>
   <div>
     <div>
-      <div>Org {{ heliumState }}</div>
-
+      <div>Org {{ heliumState.organization }}</div>
+      IORDEER heliumState.devices: -{{ heliumState.deviceCount }}-
       <div>
         test
-        <form @submit.prevent="handleSubmit">
-          <input
-            v-model="form.name"
-            type="text"
-            name="name"
-            placeholder="Enter name"
-          />
-          <input
-            v-model="form.email"
-            type="email"
-            name="email"
-            placeholder="Enter email"
-          />
-          <textarea
-            v-model="form.message"
-            placeholder="Enter message"
-            name="message"
-          ></textarea>
-          <button type="submit" @click="submitDevice">Send</button>
+        <form v-if="heliumState.devices" @submit.prevent="handleSubmit">
+          <input v-model="form.app_eui" type="text" name="name" required />
+
+          <v-btn type="submit" @click="newDevice">Add a new device</v-btn>
         </form>
       </div>
       <v-btn to="/"> Back </v-btn>
       <v-btn @click="mountaionDetailsGet()"> mountaionDetailsGet </v-btn>
       <v-btn @click="heliumOrgDetails()"> heliumOrgDetails </v-btn>
       <v-btn @click="heliumDevices()"> heliumDevices </v-btn>
-      olala
+
       <!-- {{ deviceNew }}
   olala
   <v-card v-if="deviceNew" class="mx-auto" max-width="344">
@@ -199,7 +181,7 @@ const mountaionDetailsGet = async () => {
 
       {{ mountainData.title }}
       {{ mountainData.description }}
-      <div>
+      <div @click="increaseandappend()">
         <v-card
           v-for="device in heliumState.devices"
           key="device.app_eui"
