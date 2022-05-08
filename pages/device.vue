@@ -120,6 +120,14 @@ const newDevice = async () => {
     }
   ).catch((error) => error.data);
   console.log("form.app_eui,", form.app_eui);
+const deleteDevice = async (id) => {
+  const deletedDevice = await $fetch(
+    `https://console.helium.com/api/v1/devices/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        key: config.heliumKey,
+  )
 };
 
 const mountainData = ref({
@@ -150,7 +158,7 @@ const mountaionDetailsGet = async () => {
         <form v-if="heliumState.devices" @submit.prevent="handleSubmit">
           <input v-model="form.app_eui" type="text" name="name" required />
 
-          <v-btn type="submit" @click="newDevice">Add a new device</v-btn>
+          <v-btn type="submit" @click="addDevice">Add a new device</v-btn>
         </form>
       </div>
       <v-btn to="/"> Back </v-btn>
@@ -181,7 +189,7 @@ const mountaionDetailsGet = async () => {
 
       {{ mountainData.title }}
       {{ mountainData.description }}
-      <div @click="increaseandappend()">
+      <div>
         <v-card
           v-for="device in heliumState.devices"
           key="device.app_eui"
@@ -200,7 +208,11 @@ const mountaionDetailsGet = async () => {
               </div>
             </div>
           </v-card-header>
-          <v-card-actions> </v-card-actions>
+          <v-card-actions
+            ><v-btn @click="deleteDevice(device.id)">
+              DELETE
+            </v-btn></v-card-actions
+          >
         </v-card>
       </div>
     </div>
