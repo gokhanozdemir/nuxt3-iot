@@ -2,6 +2,7 @@
 import { server } from "process";
 
 const config = useRuntimeConfig();
+
 // const { data } = await useAsyncData("count", () => $fetch("/api/count"));
 // const { data: organization } = await useFetch(
 //   "https://console.helium.com/api/v1/organization",
@@ -76,7 +77,7 @@ const heliumOrgDetails = async () => {
   ).catch((error) => error.data);
 };
 
-const heliumDevices = async () => {
+const listDevices = async () => {
   heliumState.value.devices = await $fetch(
     "https://console.helium.com/api/v1/devices",
     {
@@ -102,7 +103,7 @@ const heliumDevices = async () => {
   increaseandappend();
 };
 
-const newDevice = async () => {
+const addDevice = async () => {
   heliumState.value.deviceNew = await $fetch(
     "https://console.helium.com/api/v1/devices",
     {
@@ -118,8 +119,12 @@ const newDevice = async () => {
         dev_eui: "0102030405060709",
       },
     }
-  ).catch((error) => error.data);
-  console.log("form.app_eui,", form.app_eui);
+  )
+    .catch((error) => error.data)
+    .then(async () => await listDevices());
+  // console.log("form.app_eui,", form.app_eui);
+};
+
 const deleteDevice = async (id) => {
   const deletedDevice = await $fetch(
     `https://console.helium.com/api/v1/devices/${id}`,
@@ -127,7 +132,12 @@ const deleteDevice = async (id) => {
       method: "DELETE",
       headers: {
         key: config.heliumKey,
+      },
+    }
   )
+    .catch((error) => error.data)
+    .then(async () => await listDevices());
+  // console.log(deletedDevice);
 };
 
 const mountainData = ref({
@@ -164,26 +174,7 @@ const mountaionDetailsGet = async () => {
       <v-btn to="/"> Back </v-btn>
       <v-btn @click="mountaionDetailsGet()"> mountaionDetailsGet </v-btn>
       <v-btn @click="heliumOrgDetails()"> heliumOrgDetails </v-btn>
-      <v-btn @click="heliumDevices()"> heliumDevices </v-btn>
-
-      <!-- {{ deviceNew }}
-  olala
-  <v-card v-if="deviceNew" class="mx-auto" max-width="344">
-    <v-card-header>
-      <div>
-        <div class="text-overline mb-1">DeviceNew</div>
-        <div class="text-h6 mb-1">
-          <strong>Active: {{ deviceNew.active }}</strong>
-        </div>
-        <div class="text-caption">
-          {{ deviceNew.app_key }}
-          <span>{{ deviceNew }}</span>
-        </div>
-      </div>
-    </v-card-header>
-    <v-card-actions> </v-card-actions>
-  </v-card>
-  olala -->
+      <v-btn @click="listDevices()"> listDevices </v-btn>
 
       <div style="background: lightblue" v-text="mountainData"></div>
 
