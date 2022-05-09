@@ -3,7 +3,10 @@ import vuetify from "./plugins/vuetify";
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
-  css: ["vuetify/lib/styles/main.sass"],
+  typescript: {
+    shim: false,
+  },
+  css: ["vuetify/dist/vuetify.css"],
   build: {
     transpile: ["vuetify"],
   },
@@ -11,6 +14,16 @@ export default defineNuxtConfig({
     define: {
       "process.env.DEBUG": false,
     },
+    // server: {
+    //   proxy: {
+    //     "/api/": {
+    //       changeOrigin: true,
+    //       target: "https://console.helium.com",
+    //       secure: false,
+    //       rewrite: (path) => path.replace(/^\/api/, ""),
+    //     },
+    //   },
+    // },
   },
   ssr: false,
   runtimeConfig: {
