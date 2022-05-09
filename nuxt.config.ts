@@ -14,17 +14,17 @@ export default defineNuxtConfig({
     define: {
       "process.env.DEBUG": false,
     },
-    // server: {
-    //   proxy: {
-    //     "/api/": {
-    //       changeOrigin: true,
-    //       target: "https://console.helium.com",
-    //       secure: false,
-    //       rewrite: (path) => path.replace(/^\/api/, ""),
-    //     },
-    //   },
-    // },
+    server: {
+      proxy: {
+        "/api": {
+          ws: true,
+          changeOrigin: true,
+          target: "https://console.helium.com",
+        },
+      },
+    },
   },
+
   ssr: false,
   runtimeConfig: {
     // The private keys which are only available within server-side

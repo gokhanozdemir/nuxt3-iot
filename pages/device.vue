@@ -38,7 +38,7 @@ const config = useRuntimeConfig();
 // response.headers
 
 // const { data: deviceNew } = await useFetch(
-//   "https://console.helium.com/api/v1/devices",
+//   "/api/v1/devices",
 //   {
 //     method: "POST",
 //     params: {
@@ -66,27 +66,21 @@ let heliumState = ref({
 });
 
 const heliumOrgDetails = async () => {
-  heliumState.value.organization = await $fetch(
-    "https://console.helium.com/api/v1/organization",
-    {
-      method: "GET",
-      headers: {
-        key: config.heliumKey,
-      },
-    }
-  ).catch((error) => error.data);
+  heliumState.value.organization = await $fetch("/api/v1/organization", {
+    method: "GET",
+    headers: {
+      key: config.heliumKey,
+    },
+  }).catch((error) => error.data);
 };
 
 const listDevices = async () => {
-  heliumState.value.devices = await $fetch(
-    "https://console.helium.com/api/v1/devices",
-    {
-      method: "GET",
-      headers: {
-        key: config.heliumKey,
-      },
-    }
-  ).catch((error) => error.data);
+  heliumState.value.devices = await $fetch("/api/v1/devices", {
+    method: "GET",
+    headers: {
+      key: config.heliumKey,
+    },
+  }).catch((error) => error.data);
 
   let nextID = "100000000000001";
   heliumState.deviceCount = heliumState.value.devices.length;
@@ -104,37 +98,31 @@ const listDevices = async () => {
 };
 
 const addDevice = async () => {
-  heliumState.value.deviceNew = await $fetch(
-    "https://console.helium.com/api/v1/devices",
-    {
-      method: "POST",
-      headers: {
-        key: config.heliumKey,
-        "Content-Type": "application/json",
-      },
-      params: {
-        name: "kaktus10004",
-        app_eui: form.app_eui,
-        app_key: "01020304050607080910111213141517",
-        dev_eui: "0102030405060709",
-      },
-    }
-  )
+  heliumState.value.deviceNew = await $fetch("/api/v1/devices", {
+    method: "POST",
+    headers: {
+      key: config.heliumKey,
+      "Content-Type": "application/json",
+    },
+    params: {
+      name: "kaktus10004",
+      app_eui: form.app_eui,
+      app_key: "01020304050607080910111213141517",
+      dev_eui: "0102030405060709",
+    },
+  })
     .catch((error) => error.data)
     .then(async () => await listDevices());
   // console.log("form.app_eui,", form.app_eui);
 };
 
 const deleteDevice = async (id) => {
-  const deletedDevice = await $fetch(
-    `https://console.helium.com/api/v1/devices/${id}`,
-    {
-      method: "DELETE",
-      headers: {
-        key: config.heliumKey,
-      },
-    }
-  )
+  const deletedDevice = await $fetch(`/api/v1/devices/${id}`, {
+    method: "DELETE",
+    headers: {
+      key: config.heliumKey,
+    },
+  })
     .catch((error) => error.data)
     .then(async () => await listDevices());
   // console.log(deletedDevice);
